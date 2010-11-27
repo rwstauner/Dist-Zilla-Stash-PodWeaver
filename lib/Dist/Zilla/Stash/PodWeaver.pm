@@ -5,6 +5,8 @@ package Dist::Zilla::Stash::PodWeaver;
 
 	# dist.ini
 
+	[@YourFavoritePluginBundle]
+
 	[%PodWeaver]
 	-StopWords:include = WordsIUse ThatAreNotWords
 
@@ -55,14 +57,19 @@ sub BUILDARGS {
 
 =head1 DESCRIPTION
 
-This performs this L<Dist::Zilla::Role::Stash> role.
+This performs the L<Dist::Zilla::Role::Stash> role.
 
 When using L<Dist::Zilla::Plugin::PodWeaver>
 with a I<config_plugin> it's difficult to pass more
 configuration options to L<Pod::Weaver> plugins.
 
+This is often the case when using a
+L<Dist::Zilla::PluginBundle|Dist::Zilla::Role::PluginBundle>
+that uses a
+L<Pod::Weaver::PluginBundle|Pod::Weaver::Role::PluginBundle>.
+
 This stash is intended to allow you to set other options in your F<dist.ini>
-that can be accessed by Pod::Weaver plugins.
+that can be accessed by L<Pod::Weaver> plugins.
 
 Because you know how you like your dists built,
 (and you're using PluginBundles to do it)
