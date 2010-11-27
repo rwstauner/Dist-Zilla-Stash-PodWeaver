@@ -38,7 +38,8 @@ sub BUILDARGS {
 	# word characters (valid identifiers) are for this object.
 	my @local = grep { /^\w+$/ } keys %copy;
 	my %other;
-	@other{@local} = delete @copy{@local};
+	@other{@local} = delete @copy{@local}
+		if @local;
 
 	confess "don't try to pass _config as a build arg!"
 		if $other{_config};
