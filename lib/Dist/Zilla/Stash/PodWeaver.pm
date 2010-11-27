@@ -6,20 +6,48 @@ package Dist::Zilla::Stash::PodWeaver;
 	# dist.ini
 
 	[%PodWeaver]
-	stopwords = wordsiuse thatarenotwords
+	-StopWords:include = WordsIUse ThatAreNotWords
 
 =cut
 
+use Pod::Weaver::Config::Assembler ();
 use Moose;
 with 'Dist::Zilla::Role::Stash';
 
-sub mvp_multivalue_args { qw(stopwords) }
-
-has stopwords => (
-	is  => 'rw',
-	isa => 'ArrayRef[Str]',
-	default => sub { [] }
+has _config => (
+    is       => 'ro',
+    isa      => 'HashRef',
+    default  => sub { +{} }
 );
+
+# Copied/modified from Dist::Zilla::Plugin::Prereqs
+# to allow arbitrary values to be specified.
+# This overwrites the Class::MOP::Instance method
+# called to prepare arguments before instantiation.
+sub BUILDARGS {
+	my ($class, @arg) = @_;
+	my %copy = ref $arg[0] ? %{$arg[0]} : @arg;
+
+	my $zilla = delete $copy{zilla};
+	my $name  = delete $copy{plugin_name};
+
+	# keys for other plugins should include non-word characters
+	# (like "-Plugin::Name:variable"), so any keys that are only
+	# word characters (valid identifiers) are for this object.
+	my @local = grep { /^\w+$/ } keys %copy;
+	my %other;
+	@other{@local} = delete @copy{@local};
+
+	confess "don't try to pass _config as a build arg!"
+		if $other{_config};
+
+	return {
+		zilla => $zilla,
+		plugin_name => $name,
+		_config     => \%copy,
+		%other,
+	}
+}
 
 1;
 
