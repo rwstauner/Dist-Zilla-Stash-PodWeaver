@@ -52,6 +52,44 @@ sub BUILDARGS {
 	}
 }
 
+sub get_stashed_config {
+	my ($class, $plugin, $document, $input) = @_;
+	return unless my $zilla = $input->{zilla};
+	return unless my $stash = $zilla->stash_named('%PodWeaver');
+
+	# use ref() rather than $plugin->plugin_name() because we want to match
+	# the full package name as returned by expand_package() below
+	# rather than '@Bundle/ShortPluginName'
+	my $name = ref($plugin);
+
+	my $config = $stash->_config;
+	my $stashed = {};
+
+	while( my ($key, $value) = each %$config ){
+		# plugin name and variable separated by non-word chars
+		# "Module::Name:variable" "-Plugin/variable"
+		my ($plug, $attr) = ($key =~ /^(.+?)\W+(\w+)$/);
+		my $pack = Pod::Weaver::Config::Assembler->expand_package($plug);
+
+		$stashed->{$attr} = $value
+			if $pack eq $name;
+	}
+	return $stashed;
+}
+
+sub load_stashed_config {
+	my ($class) = shift;
+	my ($plugin, $document, $input, $stashed) = @_;
+	return unless $stashed ||= $class->get_stashed_config(@_);
+
+	while( my ($key, $value) = each %$stashed ){
+		# call attribute writer (attribute must be 'rw'!)
+		# TODO: concatenate rather than overwrite
+		# TODO: determine attr 'type'... if ArrayRef or Str
+		$plugin->$key($value);
+	}
+}
+
 1;
 
 =for stopwords PluginBundles dists
