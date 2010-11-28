@@ -16,10 +16,10 @@ my %confs = (
 	't/ini-test' => {
 		'argument_separator'  => '^(.+?)\W+(\w+)$',
 		_config => {
-			'@Bundle-fakeattr'    => 'fakevalue1',
-			'-Plugin/fakeattr'    => 'fakevalue2',
-			'Section->heading'    => 'head5',
-			'-Plug::Name::config' => 'confy',
+			'@ABundle-fakeattr'    => 'fakevalue1',
+			'-APlugin/fakeattr'    => 'fakevalue2',
+			'ASection->heading'    => 'head5',
+			'-APlug::Name::config' => 'confy',
 		}
 	}
 );
