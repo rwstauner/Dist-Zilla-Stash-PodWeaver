@@ -91,7 +91,7 @@ sub get_stashed_config {
 	return $stashed;
 }
 
-sub load_stashed_config {
+sub merge_stashed_config {
 	my ($class) = shift;
 	my ($plugin, $document, $input, $stashed) = @_;
 	return unless $stashed ||= $class->get_stashed_config(@_);
@@ -170,7 +170,7 @@ plugin that doesn't support it, please contact that plugin's author(s)
 and let them know about this module.
 
 If you are a L<Pod::Weaver> plugin author,
-have a look at the L</get_stashed_config> and L</load_stashed_config> methods
+have a look at the L</get_stashed_config> and L</merge_stashed_config> methods
 to see easy ways to get values from this stash.
 
 Please contact me (and/or send patches) if something doesn't work
