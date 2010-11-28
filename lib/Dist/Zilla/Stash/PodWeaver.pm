@@ -133,9 +133,28 @@ sub merge_stashed_config {
 
 	while( my ($key, $value) = each %$stashed ){
 		# call attribute writer (attribute must be 'rw'!)
-		# TODO: concatenate rather than overwrite
-		# TODO: determine attr 'type'... if ArrayRef or Str
-		$plugin->$key($value);
+		my $attr = $plugin->meta->find_attribute_by_name($key);
+		my $type = $attr->type_constraint;
+		my $previous = $plugin->$key;
+		if( $previous ){
+			if( UNIVERSAL::isa($previous, 'ARRAY') ){
+				push(@$previous, $value);
+			}
+			elsif( $type->name eq 'Str' ){
+				# TODO: pass in string for joining
+				$plugin->$key(join(' ', $previous, $value));
+			}
+			#elsif( $type->name eq 'Bool' )
+			else {
+				$plugin->$key($value);
+			}
+		}
+		else {
+			$value = [$value]
+				if $type->name =~ /^arrayref/i;
+
+			$plugin->$key($value);
+		}
 	}
 }
 
