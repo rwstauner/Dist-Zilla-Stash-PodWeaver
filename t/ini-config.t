@@ -10,12 +10,13 @@ my %confs = (
 	't/ini-sep'  => {
 		mods => {
 			'Pod::Weaver::Plugin::PlugName' => { 'Attr::Name' => 'oops' },
-			'Mod::Name' => { '!goo-ber' => 'nuts' }
+			'Mod::Name' => { '!goo-ber' => 'nuts', pea => 'nut' }
 		},
 		'argument_separator'  => '^([^|]+)\|([^|]+)$',
 		_config => {
 			'-PlugName|Attr::Name' => 'oops',
 			'+Mod::Name|!goo-ber'  => 'nuts',
+			'+Mod::Name|pea'       => 'nut',
 		}
 	},
 	't/ini-test' => {
