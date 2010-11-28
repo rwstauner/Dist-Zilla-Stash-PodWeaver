@@ -22,6 +22,14 @@ has _config => (
     default  => sub { +{} }
 );
 
+has argument_separator => (
+    is       => 'ro',
+    isa      => 'Str',
+	# plugin name and variable separated by non-word chars
+	# "Module::Name:variable" "-Plugin/variable"
+    default  => '^(.+?)\W+(\w+)$'
+);
+
 # Copied/modified from Dist::Zilla::Plugin::Prereqs
 # to allow arbitrary values to be specified.
 # This overwrites the Class::MOP::Instance method
@@ -64,11 +72,10 @@ sub get_stashed_config {
 
 	my $config = $stash->_config;
 	my $stashed = {};
+	my $splitter = qr/${\ $stash->argument_separator }/;
 
 	while( my ($key, $value) = each %$config ){
-		# plugin name and variable separated by non-word chars
-		# "Module::Name:variable" "-Plugin/variable"
-		my ($plug, $attr) = ($key =~ /^(.+?)\W+(\w+)$/);
+		my ($plug, $attr) = ($key =~ $splitter);
 		my $pack = Pod::Weaver::Config::Assembler->expand_package($plug);
 
 		$stashed->{$attr} = $value
