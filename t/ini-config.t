@@ -56,7 +56,7 @@ foreach my $dir ( keys %confs ){
 		$mock->fake_module($mod, new => sub { bless {}, $_[0] });
 		my $plug = $mod->new();
 		isa_ok($plug, $mod);
-		my $stash = Dist::Zilla::Stash::PodWeaver->get_stashed_config($plug, undef, {zilla => $zilla});
+		my $stash = Dist::Zilla::Stash::PodWeaver->get_stashed_config($plug, {zilla => $zilla});
 		is_deeply($stash, $mods->{$mod}, 'stashed config expected');
 	}
 }

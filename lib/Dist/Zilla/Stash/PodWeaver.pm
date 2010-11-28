@@ -131,18 +131,25 @@ appropriate for the plugin passed to the method.
 	# from inside Pod::Weaver::Plugin::APlug
 
 	my $stashed =
-	Dist::Zilla::Stash::PodWeaver->get_stashed_config($self, $document, $input);
+	Dist::Zilla::Stash::PodWeaver->get_stashed_config($self, \%opts);
 
 	# $stashed => {
 	#   'attr1'   => 'value1',
 	#   'second'  => '2nd'
 	# }
 
+Possible options to be included in the hashref:
+
+=for :list
+* I<zilla>
+The current dist-zilla object (which contains the stash).
+
 =cut
 
 sub get_stashed_config {
-	my ($class, $plugin, $document, $input) = @_;
-	return unless my $zilla = $input->{zilla};
+	my ($class, $plugin, $opts) = @_;
+	$opts ||= {};
+	return unless my $zilla = $opts->{zilla};
 	return unless my $stash = $zilla->stash_named('%PodWeaver');
 
 	# use ref() rather than $plugin->plugin_name() because we want to match
@@ -166,6 +173,8 @@ sub get_stashed_config {
 
 =method merge_stashed_config
 
+	Dist::Zilla::Stash::PodWeaver->get_stashed_config($plugin, \%opts);
+
 Get the stashed config (see L</get_stashed_config>),
 then attempt to merge it into the plugin.
 
@@ -175,12 +184,24 @@ It will attempt to push onto array references and
 concatenate onto existing strings (joined by a space).
 It will overwrite any other types.
 
+Possible options:
+
+=for :list
+* I<stashed>
+A hashref like that returned from L</get_stashed_config>.
+If not present, L</get_stashed_config> will be called.
+* I<zilla>
+The current dist-zilla object.
+This is only needed if I<stashed> is not present.
+
 =cut
 
 sub merge_stashed_config {
 	my ($class) = shift;
-	my ($plugin, $document, $input, $stashed) = @_;
-	return unless $stashed ||= $class->get_stashed_config(@_);
+	my ($plugin, $opts) = @_;
+	$opts ||= {};
+	my $stashed = $opts->{stashed};
+	return unless $stashed ||= $class->get_stashed_config($plugin, $opts);
 
 	while( my ($key, $value) = each %$stashed ){
 		# call attribute writer (attribute must be 'rw'!)
@@ -211,7 +232,7 @@ sub merge_stashed_config {
 
 1;
 
-=for stopwords PluginBundles PluginName dists Flibberoloo ini
+=for stopwords PluginBundles PluginName dists zilla dist-zilla Flibberoloo ini
 
 =head1 DESCRIPTION
 
