@@ -9,8 +9,8 @@ my %confs = (
 	't/ini-sep'  => {
 		'argument_separator'  => '^([^|]+)\|([^|]+)$',
 		_config => {
-			'-PlugName|attr-name' => 'oops',
-			'+Mod::Name|!goober'  => 'nuts',
+			'-PlugName|Attr::Name' => 'oops',
+			'+Mod::Name|!goo-ber'  => 'nuts',
 		}
 	},
 	't/ini-test' => {
@@ -26,8 +26,7 @@ my %confs = (
 
 plan tests => (scalar keys %confs);
 
-foreach my $dir ( glob("t/ini-*") ){
-	next unless -d $dir;
+foreach my $dir ( keys %confs ){
 
 	my $zilla = Dist::Zilla::Tester->from_config(
 		{ dist_root => $dir },
