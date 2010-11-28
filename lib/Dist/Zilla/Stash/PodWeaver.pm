@@ -141,7 +141,7 @@ sub merge_stashed_config {
 
 1;
 
-=for stopwords PluginBundles dists
+=for stopwords PluginBundles PluginName dists Flibberoloo ini
 
 =head1 DESCRIPTION
 
@@ -173,7 +173,7 @@ so the PluginName should include the leading character
 to identify its type:
 
 =for :list
-* C< > (no character) (Pod::Weaver::Section::I<Name>)
+* C<> (no character) (Pod::Weaver::Section::I<Name>)
 * C<-> Plugin (Pod::Weaver::Plugin::I<Name>)
 * C<@> Bundle (Pod::Weaver::PluginBundle::I<Name>)
 * C<+> Full Package Name (I<Name>)
@@ -192,7 +192,22 @@ for the [fictional] I<Pod::Weaver::Section::Complaints> plugin.
 Would add 'Flibberoloo' to the list of stopwords
 added by the L<Pod::Weaver::Plugin::StopWords> plugin.
 
+	+Some::Other::Module:silly = 1
+
+Would set the 'silly' flag to true on I<Some::Other::Module>.
+
 =head1 BUGS AND LIMITATIONS
+
+=over
+
+=item *
+
+Arguments can only be specified in a F<dist.ini> stash once,
+even if the plugin would normally allow multiple entries
+in a F<weaver.ini>.  Since the arguments are dynamic (unknown to the class)
+the class cannot specify which arguments should accept multiple values.
+
+=item *
 
 Including the package name gives the options a namespace
 (instead of trying to set the I<include> attribute for 2 different plugins).
@@ -210,5 +225,7 @@ to see easy ways to get values from this stash.
 
 Please contact me (and/or send patches) if something doesn't work
 like you think it should.
+
+=back
 
 =cut
