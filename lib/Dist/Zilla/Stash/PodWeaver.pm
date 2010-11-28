@@ -95,12 +95,50 @@ sub BUILDARGS {
 	}
 }
 
+=method expand_package
+
+Expand shortened package monikers to the full package name.
+
+Changes leading I<+> to I<=> and then passes value to
+L<Pod::Weaver::Config::Assembler/expand_package>.
+
+See L</USAGE> for a description.
+
+=cut
+
 sub expand_package {
 	my ($class, $pack) = @_;
 	# Cannot start an ini line with '='
 	$pack =~ s/^\+/=/;
 	Pod::Weaver::Config::Assembler->expand_package($pack);
 }
+
+=method get_stashed_config
+
+Return a hashref of the config arguments for the plugin
+determined by C<< ref($plugin) >>.
+
+This is a slice of the I<_config> attribute of the Stash
+appropriate for the plugin passed to the method.
+
+	# with a stash of:
+	# _config => {
+	#   '-APlug:attr1'   => 'value1',
+	#   '-APlug:second'  => '2nd',
+	#   '-OtherPlug:attr => '0'
+	# }
+
+	# from inside Pod::Weaver::Plugin::APlug
+
+	my $stashed =
+	Dist::Zilla::Stash::PodWeaver->get_stashed_config($self, $document, $input);
+
+	# $stashed => {
+	#   'attr1'   => 'value1',
+	#   'second'  => '2nd'
+	# }
+
+=cut
 
 sub get_stashed_config {
 	my ($class, $plugin, $document, $input) = @_;
@@ -125,6 +163,19 @@ sub get_stashed_config {
 	}
 	return $stashed;
 }
+
+=method merge_stashed_config
+
+Get the stashed config (see L</get_stashed_config>),
+then attempt to merge it into the plugin.
+
+This require the plugin's attributes to be writable (C<'rw'>).
+
+It will attempt to push onto array references and
+concatenate onto existing strings (joined by a space).
+It will overwrite any other types.
+
+=cut
 
 sub merge_stashed_config {
 	my ($class) = shift;
