@@ -16,16 +16,51 @@ use Pod::Weaver::Config::Assembler ();
 use Moose;
 with 'Dist::Zilla::Role::Stash';
 
+=attr _config
+
+A hashref where the dynamic options will be stored.
+
+Do not attempt to assign to this from your F<dist.ini>.
+
+Rather than accessing this directly,
+consider L</get_stashed_config> or L</merge_stashed_config>.
+
+=cut
+
 has _config => (
     is       => 'ro',
     isa      => 'HashRef',
     default  => sub { +{} }
 );
 
+=attr argument_separator
+
+A regular expression that will capture
+the package name in C<$1> and
+the attribute name in C<$2>.
+
+Defaults to C<< ^(.+?)\W+(\w+)$ >>
+which means the package variable and the attribute
+will be separated by non-word characters
+(which assumes the attributes will be
+only word characters/valid perl identifiers).
+
+You will need to set this attribute in your stash
+if you need to assign to an attribute in a package that contains
+non-word characters.
+This is an example (taken from the tests in F<t/ini-sep>).
+
+	# dist.ini
+	[%PodWeaver]
+	argument_separator = ^([^|]+)\|([^|]+)$
+	-PlugName|Attr::Name = oops
+	+Mod::Name|!goo-ber = nuts
+
+=cut
+
 has argument_separator => (
     is       => 'ro',
     isa      => 'Str',
-	# plugin name and variable separated by non-word chars
 	# "Module::Name:variable" "-Plugin/variable"
     default  => '^(.+?)\W+(\w+)$'
 );
