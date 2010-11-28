@@ -128,4 +128,52 @@ Because you know how you like your dists built,
 (and you're using PluginBundles to do it)
 but you need a little extra customization.
 
+=head1 USAGE
+
+The attributes should be named like
+C<PluginName:attributes>.
+The PluginName will be passed to
+C<< Pod::Weaver::Config::Assembler->expand_package() >>
+so the PluginName should include the leading character
+to identify its type:
+
+=for :list
+* C< > (no character) (Pod::Weaver::Section::I<Name>)
+* C<-> Plugin (Pod::Weaver::Plugin::I<Name>)
+* C<@> Bundle (Pod::Weaver::PluginBundle::I<Name>)
+* C<+> Full Package Name (I<Name>)
+An ini config line cannot start with an I< = >
+so this module will convert any lines that start with I< + > to I< = >.
+
+For example
+
+	Complaints:use_fake_email = 1
+
+Would set the 'use_fake_email' attribute to '1'
+for the [fictional] I<Pod::Weaver::Section::Complaints> plugin.
+
+	-StopWords:include = Flibberoloo
+
+Would add 'Flibberoloo' to the list of stopwords
+added by the L<Pod::Weaver::Plugin::StopWords> plugin.
+
+=head1 BUGS AND LIMITATIONS
+
+Including the package name gives the options a namespace
+(instead of trying to set the I<include> attribute for 2 different plugins).
+
+Unfortunately this does not automatically set the options on the plugins.
+The plugins need to know to use this stash.
+
+So if you'd like to be able to use this stash with a L<Pod::Weaver>
+plugin that doesn't support it, please contact that plugin's author(s)
+and let them know about this module.
+
+If you are a L<Pod::Weaver> plugin author,
+have a look at the L</get_stashed_config> and L</load_stashed_config> methods
+to see easy ways to get values from this stash.
+
+Please contact me (and/or send patches) if something doesn't work
+like you think it should.
+
 =cut
