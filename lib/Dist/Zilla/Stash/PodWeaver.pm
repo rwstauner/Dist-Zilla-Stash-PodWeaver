@@ -60,6 +60,13 @@ sub BUILDARGS {
 	}
 }
 
+sub expand_package {
+	my ($class, $pack) = @_;
+	# Cannot start an ini line with '='
+	$pack =~ s/^\+/=/;
+	Pod::Weaver::Config::Assembler->expand_package($pack);
+}
+
 sub get_stashed_config {
 	my ($class, $plugin, $document, $input) = @_;
 	return unless my $zilla = $input->{zilla};
@@ -76,7 +83,7 @@ sub get_stashed_config {
 
 	while( my ($key, $value) = each %$config ){
 		my ($plug, $attr) = ($key =~ $splitter);
-		my $pack = Pod::Weaver::Config::Assembler->expand_package($plug);
+		my $pack = $class->expand_package($plug);
 
 		$stashed->{$attr} = $value
 			if $pack eq $name;
