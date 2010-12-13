@@ -14,24 +14,6 @@ package Dist::Zilla::Stash::PodWeaver;
 
 use Pod::Weaver::Config::Assembler ();
 use Moose;
-with 'Dist::Zilla::Role::Stash';
-
-=attr _config
-
-A hashref where the dynamic options will be stored.
-
-Do not attempt to assign to this from your F<dist.ini>.
-
-Rather than accessing this directly,
-consider L</get_stashed_config> or L</merge_stashed_config>.
-
-=cut
-
-has _config => (
-    is       => 'ro',
-    isa      => 'HashRef',
-    default  => sub { +{} }
-);
 
 =attr argument_separator
 
@@ -65,35 +47,7 @@ has argument_separator => (
     default  => '^(.+?)\W+(\w+)$'
 );
 
-# Copied/modified from Dist::Zilla::Plugin::Prereqs
-# to allow arbitrary values to be specified.
-# This overwrites the Class::MOP::Instance method
-# called to prepare arguments before instantiation.
-sub BUILDARGS {
-	my ($class, @arg) = @_;
-	my %copy = ref $arg[0] ? %{$arg[0]} : @arg;
-
-	my $zilla = delete $copy{zilla};
-	my $name  = delete $copy{plugin_name};
-
-	# keys for other plugins should include non-word characters
-	# (like "-Plugin::Name:variable"), so any keys that are only
-	# word characters (valid identifiers) are for this object.
-	my @local = grep { /^\w+$/ } keys %copy;
-	my %other;
-	@other{@local} = delete @copy{@local}
-		if @local;
-
-	confess "don't try to pass _config as a build arg!"
-		if $other{_config};
-
-	return {
-		zilla => $zilla,
-		plugin_name => $name,
-		_config     => \%copy,
-		%other,
-	}
-}
+with 'Dist::Zilla::Role::Stash::Plugins';
 
 =method expand_package
 
