@@ -144,6 +144,13 @@ sub get_stashed_config {
 
 	while( my ($key, $value) = each %$config ){
 		my ($plug, $attr) = ($key =~ $splitter);
+
+		unless($plug && $attr){
+			$zilla->log("'$key' did not match $splitter.  " .
+				"Do you need a more specific 'argument_separator'?");
+			next;
+		}
+
 		my $pack = $class->expand_package($plug);
 
 		$stashed->{$attr} = $value
