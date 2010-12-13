@@ -22,8 +22,8 @@ with 'Dist::Zilla::Role::Stash::Plugins';
 
 Expand shortened package monikers to the full package name.
 
-Changes leading I<+> to I<=> and then passes value to
-L<Pod::Weaver::Config::Assembler/expand_package>.
+Changes leading I<+> to I<=> and then passes the value to
+I<expand_package> in L<Pod::Weaver::Config::Assembler>.
 
 See L</USAGE> for a description.
 
@@ -51,7 +51,7 @@ configuration options to L<Pod::Weaver> plugins.
 This is often the case when using a
 L<Dist::Zilla::PluginBundle|Dist::Zilla::Role::PluginBundle>
 that uses a
-L<Pod::Weaver::PluginBundle|Pod::Weaver::Role::PluginBundle>.
+L<Pod::Weaver::PluginBundle|Pod::Weaver::PluginBundle::Default>.
 
 This stash is intended to allow you to set other options in your F<dist.ini>
 that can be accessed by L<Pod::Weaver> plugins.
