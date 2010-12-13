@@ -9,6 +9,10 @@ with qw(
 	Dist::Zilla::Role::Stash
 );
 
+# we could define a 'plugged' module attribute and create a generic
+# method like sub expand_package { $_[0]->plugged_module->expand_package($_[1]) }
+# but this is a Role (not an actual stash) and is that really useful?
+
 requires 'expand_package';
 
 =attr argument_separator
