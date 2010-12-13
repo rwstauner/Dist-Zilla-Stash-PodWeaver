@@ -12,6 +12,8 @@ package Dist::Zilla::Stash::PodWeaver;
 
 =cut
 
+use strict;
+use warnings;
 use Pod::Weaver::Config::Assembler ();
 use Moose;
 with 'Dist::Zilla::Role::Stash::Plugins';
