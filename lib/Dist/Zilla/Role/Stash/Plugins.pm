@@ -82,6 +82,7 @@ around 'BUILDARGS' => sub {
 	# keys for other plugins should include non-word characters
 	# (like "-Plugin::Name:variable"), so any keys that are only
 	# word characters (valid identifiers) are for this object.
+	# TODO: make this configurable
 	my @local = grep { /^\w+$/ } keys %$config;
 	my %other;
 	@other{@local} = delete @$config{@local}
