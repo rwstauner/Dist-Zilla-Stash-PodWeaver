@@ -28,7 +28,8 @@ This overwrites the L<Class::MOP::Instance> method
 called to prepare arguments before instantiation.
 
 It separates the expected arguments
-and places the remaining unknown arguments into I<_config>.
+(including anything caught by L</separate_local_config>)
+and places the remaining unknown/dynamic arguments into L</_config>.
 
 =cut
 
@@ -42,12 +43,30 @@ sub BUILDARGS {
 	confess 'do not try to pass _config as a build arg!'
 		if $copy{_config};
 
+	my $other = $class->separate_local_config(\%copy);
+
 	return {
 		zilla => $zilla,
 		plugin_name => $name,
 		_config     => \%copy,
+		%$other
 	}
 }
+
+=method separate_local_config
+
+Separate any arguments that should be stored directly on the object
+rather than in the dynamic L</_config> attribute.
+
+Remove those arguments from the passed in hashref,
+make any necessary modifications (like renaming the keys if desired),
+and return a hashref with the result.
+
+Required.
+
+=cut
+
+requires 'separate_local_config';
 
 no Moose::Role;
 1;
@@ -59,5 +78,7 @@ no Moose::Role;
 This is a role for a L<Plugin|Dist::Zilla::Role::Plugin>
 (or possibly other classes)
 that accepts a dynamic configuration.
+
+Plugins performing this role must define L</separate_local_config>.
 
 =cut

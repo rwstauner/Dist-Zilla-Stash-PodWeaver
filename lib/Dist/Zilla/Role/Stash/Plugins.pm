@@ -60,40 +60,6 @@ consider L</get_stashed_config> or L</merge_stashed_config>.
 
 # _config inherited
 
-=method BUILDARGS
-
-This overwrites the L<Class::MOP::Instance> method
-called to prepare arguments before instantiation.
-
-It uses L<Dist::Zilla::Role::DynamicConfig/BUILDARGS>
-to process the arguments initially,
-then separates any local arguments from the keys in _config
-(L</argument_separator>, for instance).
-
-=cut
-
-around 'BUILDARGS' => sub {
-	my ($orig, $class, @arg) = @_;
-
-	# Prepare arguments including zilla, plugin_name, and _config.
-	my $built = $orig->($class, @arg);
-	my $config  = $built->{_config};
-
-	# keys for other plugins should include non-word characters
-	# (like "-Plugin::Name:variable"), so any keys that are only
-	# word characters (valid identifiers) are for this object.
-	# TODO: make this configurable
-	my @local = grep { /^\w+$/ } keys %$config;
-	my %other;
-	@other{@local} = delete @$config{@local}
-		if @local;
-
-	return {
-		%$built,
-		%other,
-	}
-};
-
 =method get_stashed_config
 
 Return a hashref of the config arguments for the plugin
@@ -218,6 +184,30 @@ sub merge_stashed_config {
 	}
 }
 
+=method separate_local_config
+
+Removes any hash keys that are only word characters
+(valid perl identifiers (including L</argument_separator>))
+because the dynamic keys intended for other plugins will all
+contain non-word characters.
+
+Overwrite this if necessary.
+
+=cut
+
+sub separate_local_config {
+	my ($self, $config) = @_;
+	# keys for other plugins should include non-word characters
+	# (like "-Plugin::Name:variable"), so any keys that are only
+	# word characters (valid identifiers) are for this object.
+	my @local = grep { /^\w+$/ } keys %$config;
+	my %other;
+	@other{@local} = delete @$config{@local}
+		if @local;
+
+	return \%other;
+}
+
 =method stash_name
 
 Returns the stash name (including the '%').
@@ -240,7 +230,7 @@ sub stash_name {
 no Moose::Role;
 1;
 
-=for :stopwords BUILDARGS dist-zilla zilla
+=for :stopwords dist-zilla zilla
 
 =head1 DESCRIPTION
 
