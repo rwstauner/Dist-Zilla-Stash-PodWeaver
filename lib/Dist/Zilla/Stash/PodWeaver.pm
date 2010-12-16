@@ -42,7 +42,9 @@ sub expand_package {
 
 =head1 DESCRIPTION
 
-This performs the L<Dist::Zilla::Role::Stash> role.
+This performs the L<Dist::Zilla::Role::Stash> role
+(using L<Dist::Zilla::Role::DynamicConfig>
+and    L<Dist::Zilla::Role::Stash::Plugins>).
 
 When using L<Dist::Zilla::Plugin::PodWeaver>
 with a I<config_plugin> it's difficult to pass more
