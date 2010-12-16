@@ -1,4 +1,4 @@
-=head1 DESCRIPTION
+=head1 Dist::Zilla::Stash::PodWeaver
 
 This performs this L<Dist::Zilla::Role::Stash> role.
 
