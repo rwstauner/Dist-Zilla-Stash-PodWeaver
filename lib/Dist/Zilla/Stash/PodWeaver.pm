@@ -1,3 +1,4 @@
+# vim: set ts=2 sts=2 sw=2 expandtab smarttab:
 package Dist::Zilla::Stash::PodWeaver;
 # ABSTRACT: A stash of config options for Pod::Weaver
 
@@ -19,10 +20,10 @@ See L</USAGE> for a description.
 =cut
 
 sub expand_package {
-	my ($class, $pack) = @_;
-	# Cannot start an ini line with '='
-	$pack =~ s/^\+/=/;
-	Pod::Weaver::Config::Assembler->expand_package($pack);
+  my ( $self, $pack ) = @_;
+  # Cannot start an ini line with '='
+  $pack =~ s/^\+/=/;
+  Pod::Weaver::Config::Assembler->expand_package($pack);
 }
 
 1;
@@ -79,17 +80,17 @@ so this module will convert any lines that start with I< + > to I< = >.
 
 For example
 
-	Complaints:use_fake_email = 1
+  Complaints:use_fake_email = 1
 
 Would set the 'use_fake_email' attribute to '1'
 for the [fictional] I<Pod::Weaver::Section::Complaints> plugin.
 
-	-StopWords:include = Flibberoloo
+  -StopWords:include = Flibberoloo
 
 Would add 'Flibberoloo' to the list of stopwords
 added by the L<Pod::Weaver::Plugin::StopWords> plugin.
 
-	+Some::Other::Module:silly = 1
+  +Some::Other::Module:silly = 1
 
 Would set the 'silly' flag to true on I<Some::Other::Module>.
 
