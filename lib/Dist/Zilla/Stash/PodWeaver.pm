@@ -1,9 +1,10 @@
 # vim: set ts=2 sts=2 sw=2 expandtab smarttab:
+use strict;
+use warnings;
+
 package Dist::Zilla::Stash::PodWeaver;
 # ABSTRACT: A stash of config options for Pod::Weaver
 
-use strict;
-use warnings;
 use Pod::Weaver::Config::Assembler ();
 use Moose;
 with 'Dist::Zilla::Role::Stash::Plugins';
