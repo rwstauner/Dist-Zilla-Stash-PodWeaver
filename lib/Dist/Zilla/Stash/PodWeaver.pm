@@ -1,17 +1,6 @@
 package Dist::Zilla::Stash::PodWeaver;
 # ABSTRACT: A stash of config options for Pod::Weaver
 
-=head1 SYNOPSIS
-
-	# dist.ini
-
-	[@YourFavoritePluginBundle]
-
-	[%PodWeaver]
-	-StopWords:include = WordsIUse ThatAreNotWords
-
-=cut
-
 use strict;
 use warnings;
 use Pod::Weaver::Config::Assembler ();
@@ -39,6 +28,15 @@ sub expand_package {
 1;
 
 =for stopwords PluginBundles PluginName dists zilla dist-zilla Flibberoloo ini
+
+=head1 SYNOPSIS
+
+  # dist.ini
+
+  [@YourFavoritePluginBundle]
+
+  [%PodWeaver]
+  -StopWords:include = WordsIUse ThatAreNotWords
 
 =head1 DESCRIPTION
 
