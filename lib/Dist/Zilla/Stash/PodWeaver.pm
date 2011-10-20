@@ -38,7 +38,7 @@ sub expand_package {
   [@YourFavoritePluginBundle]
 
   [%PodWeaver]
-  -StopWords:include = WordsIUse ThatAreNotWords
+  -StopWords.include = WordsIUse ThatAreNotWords
 
 =head1 DESCRIPTION
 
@@ -64,8 +64,8 @@ but you need a little extra customization.
 
 =head1 USAGE
 
-The attributes should be named like
-C<PluginName:attributes>.
+The attributes should be separated from the plugin name with a dot:
+C<PluginName.attributes>.
 The PluginName will be passed to
 C<< Pod::Weaver::Config::Assembler->expand_package() >>
 so the PluginName should include the leading character
@@ -81,17 +81,17 @@ so this module will convert any lines that start with I< + > to I< = >.
 
 For example
 
-  Complaints:use_fake_email = 1
+  Complaints.use_fake_email = 1
 
 Would set the 'use_fake_email' attribute to '1'
 for the [fictional] I<Pod::Weaver::Section::Complaints> plugin.
 
-  -StopWords:include = Flibberoloo
+  -StopWords.include = Flibberoloo
 
 Would add 'Flibberoloo' to the list of stopwords
 added by the L<Pod::Weaver::Plugin::StopWords> plugin.
 
-  +Some::Other::Module:silly = 1
+  +Some::Other::Module.silly = 1
 
 Would set the 'silly' flag to true on I<Some::Other::Module>.
 
@@ -105,6 +105,14 @@ Arguments can only be specified in a F<dist.ini> stash once,
 even if the plugin would normally allow multiple entries
 in a F<weaver.ini>.  Since the arguments are dynamic (unknown to the class)
 the class cannot specify which arguments should accept multiple values.
+
+To work around this you can add brackets (and subscripts)
+to config lines to specify that an attribute is an array:
+
+  Plugin.attr[0] = first
+  Plugin.attr[1] = second
+
+See L<Config::MVP::Slicer/CONFIGURATION SYNTAX> for more information.
 
 =item *
 
