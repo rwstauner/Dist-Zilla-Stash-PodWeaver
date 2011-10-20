@@ -49,13 +49,15 @@ foreach my $dir ( keys %confs ){
 
   my $mods = defined($confs{$dir}) ? delete($confs{$dir}->{mods}) : undef;
 
-  is_deeply($zilla->stash_named('%PodWeaver'), $confs{$dir}, "stash matches in $dir");
+  my @fields = qw(argument_separator _config);
+  my $stash = $zilla->stash_named('%PodWeaver');
+  is_deeply [@$stash{@fields}], [@{$confs{$dir}}{@fields}], "stash matches in $dir";
 
   next unless $mods;
 
   foreach my $mod ( keys %$mods ){
-    $mock->fake_module($mod, new => sub { bless {}, $_[0] });
-    my $plug = $mod->new();
+    $mock->fake_module($mod, new => sub { bless $_[1], $_[0] }, plugin_name => sub { $_[0]->{name} });
+    my $plug = $mod->new({name => ($mod =~ /([^:]+)$/)[0]});
     isa_ok($plug, $mod);
     my $stash = $zilla->stash_named('%PodWeaver')->get_stashed_config($plug, {zilla => $zilla});
     is_deeply($stash, $mods->{$mod}, 'stashed config expected');
