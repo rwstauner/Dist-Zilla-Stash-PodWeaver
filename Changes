@@ -2,6 +2,8 @@ Revision history for Dist::Zilla::Stash::PodWeaver
 
 {{$NEXT}}
 
+1.003     2011-10-20T14:13:08Z
+
   - Fix tests to work with newest version of Dist::Zilla::Role::Stash::Plugins
 
 1.002     2011-07-15T00:43:17Z
