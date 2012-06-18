@@ -61,8 +61,8 @@ foreach my $dir ( keys %confs ){
     $mock->fake_module($mod, new => sub { bless $_[1], $_[0] }, plugin_name => sub { $_[0]->{name} });
     my $plug = $mod->new({name => ($mod =~ /([^:]+)$/)[0]});
     isa_ok($plug, $mod);
-    my $stash = $zilla->stash_named('%PodWeaver')->get_stashed_config($plug, {zilla => $zilla});
-    is_deeply($stash, $mods->{$mod}, 'stashed config expected');
+    my $stash = $zilla->stash_named('%PodWeaver')->get_stashed_config($plug);
+    is_deeply($stash, $mods->{$mod}, "stashed config expected ($dir / $mod)");
   }
 }
 
