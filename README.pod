@@ -1,3 +1,5 @@
+=pod
+
 =encoding utf-8
 
 =for :stopwords Randy Stauner ACKNOWLEDGEMENTS PluginBundles PluginName dists zilla
@@ -10,7 +12,7 @@ Dist::Zilla::Stash::PodWeaver - A stash of config options for Pod::Weaver
 
 =head1 VERSION
 
-version 1.004
+version 1.005
 
 =head1 SYNOPSIS
 
