@@ -8,8 +8,8 @@ package Dist::Zilla::Stash::PodWeaver;
 use Pod::Weaver::Config::Assembler ();
 use Moose;
 
-# 1.005 has bugfix to enable array subscript config lines
-with 'Dist::Zilla::Role::Stash::Plugins' => { -version => 1.005 };
+# bug fix for attribute order
+with 'Dist::Zilla::Role::Stash::Plugins' => { -version => 1.006 };
 
 =method expand_package
 
